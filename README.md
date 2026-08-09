@@ -1,5 +1,10 @@
 # reqlint
 
+[![CI](https://github.com/Wyzer-it/reqlint/actions/workflows/ci.yml/badge.svg)](https://github.com/Wyzer-it/reqlint/actions/workflows/ci.yml)
+[![PyPI](https://img.shields.io/pypi/v/wyzer-reqlint.svg)](https://pypi.org/project/wyzer-reqlint/)
+[![Python versions](https://img.shields.io/pypi/pyversions/wyzer-reqlint.svg)](https://pypi.org/project/wyzer-reqlint/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 ![reqlint — catch untestable language in requirements before it reaches a supplier](https://raw.githubusercontent.com/Wyzer-it/reqlint/main/assets/reqlint-card.png)
 
 **Catch untestable requirements before they reach a supplier.**
@@ -112,6 +117,17 @@ Those need to compare requirements *against each other*, across a whole document
 It is also the problem [Wyzer Detective](https://wyzer.it/detective/product) exists to solve: duplicates, contradictions and gaps across a full requirement set, with every finding traced back to its exact source reference so a reviewer can check the work. Built for teams working to AUTOSAR, ISO 26262 and ASPICE.
 
 Expect false positives from `reqlint` itself, by design — it flags "normal load" as ambiguous even in an otherwise well-formed requirement. Tune the word lists; they are meant to be edited.
+
+## Tests
+
+```bash
+pip install pytest
+pytest
+```
+
+35 tests cover each rule's true and false positives, blank-line handling, the
+`--fail-on` exit codes, and the JSON output. CI runs them on Python 3.8, 3.10,
+3.12 and 3.13.
 
 ## Contributing
 

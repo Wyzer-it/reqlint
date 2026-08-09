@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # 3.8 is the floor declared in pyproject.toml; it is not available
+          # on the ubuntu-24.04 image, so it runs on 22.04.
+          - { python-version: "3.8", os: ubuntu-22.04 }
+          - { python-version: "3.10", os: ubuntu-latest }
+          - { python-version: "3.12", os: ubuntu-latest }
+          - { python-version: "3.13", os: ubuntu-latest }
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install test dependencies
+        run: python -m pip install --upgrade pip pytest
+
+      - name: Run tests
+        run: python -m pytest -q
+
+      - name: Lint the bundled example
+        # The example is deliberately full of bad requirements, so a high-severity
+        # gate must fail on it. Exit status 1 is the expected result.
+        run: |
+          python reqlint.py examples/sample-requirements.txt --fail-on high && {
+            echo "expected a non-zero exit on the sample file"; exit 1;
+          } || test $? -eq 1
+
+      - name: Verify the package builds and is well-formed
+        if: matrix.python-version == '3.12'
+        run: |
+          python -m pip install --upgrade build twine
+          python -m build
+          python -m twine check dist/*

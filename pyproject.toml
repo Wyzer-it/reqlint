@@ -38,6 +38,9 @@ classifiers = [
     "Topic :: Text Processing :: Linguistic",
 ]
 
+[project.optional-dependencies]
+dev = ["pytest>=7"]
+
 [project.urls]
 Homepage = "https://github.com/Wyzer-it/reqlint"
 Repository = "https://github.com/Wyzer-it/reqlint"
