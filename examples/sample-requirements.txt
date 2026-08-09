@@ -1,0 +1,6 @@
+The system shall respond to a user request within 200 ms under normal load.
+The UI should be user-friendly and appropriate for all users.
+It shall handle errors gracefully.
+The response time shall be fast.
+The system may log all transactions if practical.
+The gateway shall reject malformed packets and return an HTTP 400 status code.
