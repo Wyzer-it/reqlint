@@ -1,0 +1,51 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "wyzer-reqlint"
+version = "0.1.0"
+description = "A dependency-free linter for ambiguous and untestable language in requirements text."
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Wyzer.it Ltd", email = "wyzer.os@wyzer.it" }]
+keywords = [
+    "requirements",
+    "requirements-engineering",
+    "linter",
+    "incose",
+    "ears",
+    "systems-engineering",
+    "specification",
+    "static-analysis",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Manufacturing",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Quality Assurance",
+    "Topic :: Text Processing :: Linguistic",
+]
+
+[project.urls]
+Homepage = "https://github.com/Wyzer-it/reqlint"
+Repository = "https://github.com/Wyzer-it/reqlint"
+Issues = "https://github.com/Wyzer-it/reqlint/issues"
+"Why this matters" = "https://wyzer.it/blog/contradiction-detection-hybrid-approaches"
+
+[project.scripts]
+reqlint = "reqlint:main"
+
+[tool.setuptools]
+py-modules = ["reqlint"]

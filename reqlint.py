@@ -11,6 +11,8 @@ import re
 import sys
 from dataclasses import dataclass, field, asdict
 
+__version__ = "0.1.0"
+
 AMBIGUOUS_WORDS = {
     "appropriate", "adequate", "sufficient", "reasonable", "acceptable",
     "user-friendly", "flexible", "efficient", "robust", "seamless",
@@ -107,6 +109,7 @@ def main():
     parser.add_argument("--json", action="store_true", help="Emit JSON instead of a human-readable report")
     parser.add_argument("--fail-on", choices=["low", "medium", "high"], default=None,
                          help="Exit with status 1 if any finding at or above this severity is present")
+    parser.add_argument("--version", action="version", version=f"reqlint {__version__}")
     args = parser.parse_args()
 
     reports = lint_file(args.file)

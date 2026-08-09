@@ -1,6 +1,6 @@
 # reqlint
 
-![reqlint — catch untestable language in requirements before it reaches a supplier](assets/reqlint-card.png)
+![reqlint — catch untestable language in requirements before it reaches a supplier](https://raw.githubusercontent.com/Wyzer-it/reqlint/main/assets/reqlint-card.png)
 
 **Catch untestable requirements before they reach a supplier.**
 
@@ -9,16 +9,25 @@
 One file. No dependencies. MIT licensed. Python 3.8+.
 
 ```bash
-git clone https://github.com/Wyzer-it/reqlint.git
-cd reqlint
-python3 reqlint.py examples/sample-requirements.txt
+pip install wyzer-reqlint
+reqlint your-requirements.txt
 ```
 
-Or grab the single file and go:
+> The PyPI distribution is **`wyzer-reqlint`** — the name `reqlint` was already taken on PyPI by an unrelated dependency-pinning tool. The command you run is still `reqlint`.
+
+Prefer not to install anything? It's a single file with no dependencies:
 
 ```bash
 curl -O https://raw.githubusercontent.com/Wyzer-it/reqlint/main/reqlint.py
 python3 reqlint.py your-requirements.txt
+```
+
+Or clone and try it on the bundled example:
+
+```bash
+git clone https://github.com/Wyzer-it/reqlint.git
+cd reqlint
+python3 reqlint.py examples/sample-requirements.txt
 ```
 
 ## What it looks like
