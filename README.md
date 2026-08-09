@@ -1,5 +1,7 @@
 # reqlint
 
+![reqlint — catch untestable language in requirements before it reaches a supplier](assets/reqlint-card.png)
+
 **Catch untestable requirements before they reach a supplier.**
 
 `reqlint` reads a requirements file and flags the language a test engineer cannot turn into a test case — ambiguous adjectives, weak modals, performance claims with no number attached.
