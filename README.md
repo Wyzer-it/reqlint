@@ -114,6 +114,10 @@ Those need to compare requirements *against each other*, across a whole document
 
 **→ [Contradiction detection in specs: why hybrid approaches beat pure similarity](https://wyzer.it/blog/contradiction-detection-hybrid-approaches)**
 
+And on why manual review misses most of these even when someone is looking for them — formal requirements inspections average 78% defect removal, the weakest figure of any inspection type ever measured, and the survivors are concentrated in exactly this class:
+
+**→ [Three kinds of contradiction, and why more reviewers find fewer of them](https://wyzer.it/blog/three-kinds-of-contradiction-manual-review)**
+
 It is also the problem [Wyzer Detective](https://wyzer.it/detective/product) exists to solve: duplicates, contradictions and gaps across a full requirement set, with every finding traced back to its exact source reference so a reviewer can check the work. Built for teams working to AUTOSAR, ISO 26262 and ASPICE.
 
 Expect false positives from `reqlint` itself, by design — it flags "normal load" as ambiguous even in an otherwise well-formed requirement. Tune the word lists; they are meant to be edited.
