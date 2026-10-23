@@ -39,6 +39,22 @@ def test_multiword_ambiguous_phrases_are_flagged():
     assert "ambiguous-word" in rules_fired("The system shall log transactions if practical.")
 
 
+@pytest.mark.parametrize("text", [
+    "The system shall support several languages.",
+    "Under certain conditions the relay shall open.",
+    "The fault shall be detected early.",
+    "The component shall tolerate a few dropouts.",
+])
+def test_quantity_weak_words_are_flagged(text):
+    assert "ambiguous-word" in rules_fired(text)
+
+
+def test_inflected_ambiguous_word_is_flagged_with_the_form_found():
+    findings = reqlint.lint_line(1, "A segment is adequately specified by two points.").findings
+    messages = [f.message for f in findings if f.rule == "ambiguous-word"]
+    assert len(messages) == 1 and '"adequately"' in messages[0]
+
+
 def test_precise_requirement_has_no_ambiguity_finding():
     text = "The gateway shall reject malformed packets and return an HTTP 400 status code."
     assert "ambiguous-word" not in rules_fired(text)
@@ -82,6 +98,22 @@ def test_relative_claim_with_a_unit_is_not_flagged(text):
 
 def test_no_relative_term_means_no_missing_unit_finding():
     assert "missing-unit" not in rules_fired("The gateway shall return an HTTP 400 status code.")
+
+
+@pytest.mark.parametrize("text", [
+    "The output shall be protected against short circuits.",
+    "The ECU shall detect a short-circuit on the sensor line.",
+    "The driver shall report a short to ground and a short to battery.",
+    "The long range radar shall send object data on CAN.",
+    "The lamp shall stay on as long as the door is open.",
+])
+def test_technical_terms_with_unit_hint_words_are_not_flagged(text):
+    assert "missing-unit" not in rules_fired(text)
+
+
+def test_exempt_term_does_not_hide_a_real_relative_claim():
+    text = "After a short circuit the output shall recover within a short time."
+    assert "missing-unit" in rules_fired(text)
 
 
 # --- vague-pronoun ----------------------------------------------------------

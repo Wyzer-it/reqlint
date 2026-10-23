@@ -11,7 +11,7 @@ import re
 import sys
 from dataclasses import dataclass, field, asdict
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 
 AMBIGUOUS_WORDS = {
     "appropriate", "adequate", "sufficient", "reasonable", "acceptable",
@@ -20,6 +20,23 @@ AMBIGUOUS_WORDS = {
     "various", "clearly", "normal", "typical", "minimal", "maximal",
     "as needed", "as required", "if possible", "if practical",
     "and/or", "etc", "tbd", "to be determined",
+    # Quantity and timing words that testers judged a defect in at least half
+    # their uses in the QuRE dataset (see README). Words that were mostly
+    # harmless in context ("close", "detail", "special") are deliberately left out.
+    "several", "certain", "early", "few",
+}
+
+# Inflected forms that carry the same vagueness as their base term
+# ("adequately specified"). The finding names the form actually found.
+AMBIGUOUS_WORD_FORMS = {
+    "adequate": ("adequately",),
+    "appropriate": ("appropriately",),
+    "sufficient": ("sufficiently",),
+    "reasonable": ("reasonably",),
+}
+_AMBIGUOUS_PATTERNS = {
+    w: re.compile(r"\b(" + "|".join(re.escape(f) for f in (w,) + AMBIGUOUS_WORD_FORMS.get(w, ())) + r")\b")
+    for w in AMBIGUOUS_WORDS
 }
 
 WEAK_MODALS = {"should", "may", "might", "could", "can"}
@@ -29,6 +46,17 @@ VAGUE_PRONOUNS = {"it", "this", "that", "these", "those"}
 
 UNIT_HINT_WORDS = {"fast", "quickly", "slow", "large", "small", "long", "short"}
 UNIT_PATTERN = re.compile(r"\d+(\.\d+)?\s*(ms|s|sec|seconds?|minutes?|mb|gb|kb|%|hz|km|m\b)", re.I)
+
+# Fixed technical terms and connectives that contain a unit hint word but state
+# no relative quantity: "short circuit", "short to ground", "long-range radar",
+# "as long as". Removed before the missing-unit check.
+UNIT_HINT_EXEMPT_PATTERN = re.compile(
+    r"\bshort[\s-]*(circuit\w*|cut\w*"
+    r"|to\s+(ground|gnd|battery|batt|ubatt?|vbatt?|power|supply|plus|minus))\b"
+    r"|\b(short|long)[\s-]+range\b"
+    r"|\bas\s+long\s+as\b",
+    re.I,
+)
 
 
 @dataclass
@@ -47,7 +75,7 @@ class LineReport:
 
 def check_ambiguous_words(text: str) -> list:
     lowered = text.lower()
-    hits = [w for w in AMBIGUOUS_WORDS if re.search(rf"\b{re.escape(w)}\b", lowered)]
+    hits = [m.group(0) for m in (p.search(lowered) for p in _AMBIGUOUS_PATTERNS.values()) if m]
     return [
         Finding("ambiguous-word", "medium", f'Ambiguous term "{w}" — replace with a measurable criterion.')
         for w in hits
@@ -67,7 +95,7 @@ def check_modal_strength(text: str) -> list:
 
 
 def check_missing_units(text: str) -> list:
-    lowered = text.lower()
+    lowered = UNIT_HINT_EXEMPT_PATTERN.sub(" ", text.lower())
     hits = [w for w in UNIT_HINT_WORDS if re.search(rf"\b{re.escape(w)}\b", lowered)]
     if hits and not UNIT_PATTERN.search(text):
         return [Finding(

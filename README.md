@@ -72,9 +72,9 @@ One requirement per line. That's the whole input format.
 
 | Rule | Severity | Example |
 |------|----------|---------|
-| `ambiguous-word` | medium | "appropriate", "user-friendly", "as required", "TBD" |
+| `ambiguous-word` | medium | "appropriate", "user-friendly", "as required", "TBD", "several", "certain" |
 | `weak-modal` | high | "should", "may", "could" where a binding requirement needs "shall" |
-| `missing-unit` | high | "shall be fast" with no ms/s/%/Hz anywhere in the line |
+| `missing-unit` | high | "shall be fast" with no ms/s/%/Hz anywhere in the line ("short circuit" and "long range" are not flagged) |
 | `vague-pronoun` | low | "It shall…", "This shall…" — the subject is missing |
 
 The word lists come from the [INCOSE Guide for Writing Requirements](https://www.incose.org/) and common EARS-syntax conventions. They live at the top of `reqlint.py` as plain sets — edit them to match your house style.
